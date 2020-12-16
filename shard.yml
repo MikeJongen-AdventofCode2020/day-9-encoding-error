@@ -1,0 +1,13 @@
+name: day-9-encoding-error
+version: 0.1.0
+
+authors:
+  - your-name-here <your-email-here>
+
+targets:
+  day-9-encoding-error:
+    main: src/day-9-encoding-error.cr
+
+crystal: 0.35.1
+
+license: MIT

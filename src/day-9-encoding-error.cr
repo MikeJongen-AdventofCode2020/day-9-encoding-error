@@ -29,10 +29,19 @@ unless file_name.empty?
     data << value.to_i64
   end
 
+  invalid_data = -1_i64
   (PREAMBLE...data.size).each do |index|
-    puts "invalid: #{data[index]}" unless is_valid(data[index], data[(index - PREAMBLE)...index])
+    invalid_data = data[index] unless is_valid(data[index], data[(index - PREAMBLE)...index])
   end
 
+  puts "invalid: #{invalid_data}"
+
+  start_index, end_index = find_set(invalid_data, data)
+  weakness_low = data[start_index..end_index].min
+  weakness_high = data[start_index..end_index].max
+  weakness = weakness_low + weakness_high
+
+  puts "Encryption Weakness: #{weakness}"
 end
 
 def is_valid(value : Int64, previous : Array(Int64))
@@ -43,4 +52,17 @@ def is_valid(value : Int64, previous : Array(Int64))
     end
   end
   return false
+end
+
+def find_set(sum : Int64, data : Array(Int64))
+  (0...data.size).each do |start_index|
+    total = data[start_index]
+    end_index = start_index
+    while total < sum
+      end_index += 1
+      total += data[end_index]
+    end
+    return start_index, end_index if total == sum
+  end
+  return 0, 0
 end
